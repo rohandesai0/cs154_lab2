@@ -19,28 +19,28 @@ read_data1 = rf[rs]
 read_data2 = rf[rt]
 
 # === ALU Operations ===
-result_temp = pyrtl.WireVector(bitwidth=32, name='result_temp')
+alu_out = pyrtl.WireVector(bitwidth=32, name='alu_out') 
 
 with pyrtl.conditional_assignment:
     with funct == 0b100000:   # ADD
-        result_temp |= read_data1 + read_data2
+        alu_out |= read_data1 + read_data2
     with funct == 0b100010:   # SUB
-        result_temp |= read_data1 - read_data2
+        alu_out |= read_data1 - read_data2
     with funct == 0b100100:   # AND
-        result_temp |= read_data1 & read_data2
+        alu_out |= read_data1 & read_data2
     with funct == 0b100101:   # OR
-        result_temp |= read_data1 | read_data2
+        alu_out |= read_data1 | read_data2
     with funct == 0b100110:   # XOR
-        result_temp |= read_data1 ^ read_data2
+        alu_out |= read_data1 ^ read_data2
     with funct == 0b000000:   # SLL
-        result_temp |= pyrtl.shift_left_logical(read_data2, shamt)
+        alu_out |= pyrtl.shift_left_logical(read_data2, shamt)
     with funct == 0b000010:   # SRL
-        result_temp |= pyrtl.shift_right_logical(read_data2, shamt)
+        alu_out |= pyrtl.shift_right_logical(read_data2, shamt)
     with funct == 0b000011:   # SRA
-        result_temp |= pyrtl.shift_right_arithmetic(read_data2, shamt)
+        alu_out |= pyrtl.shift_right_arithmetic(read_data2, shamt)
     with funct == 0b101010:   # SLT
-        result_temp |= pyrtl.signed_lt(read_data1, read_data2)
+        alu_out |= pyrtl.signed_lt(read_data1, read_data2)
 
 # === Write Back ===
-rf[rd] <<= result_temp  # Store the result in the register file
+rf[rd] <<= alu_out  
 
