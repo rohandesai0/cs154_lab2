@@ -2,7 +2,6 @@ import pyrtl
 
 # === Inputs and Outputs ===
 instr = pyrtl.Input(bitwidth=32, name='instr')
-result = pyrtl.Output(bitwidth=32, name='result')
 
 # === Register File ===
 rf = pyrtl.MemBlock(bitwidth=32, addrwidth=5, name='rf')
@@ -43,6 +42,5 @@ with pyrtl.conditional_assignment:
         result_temp |= pyrtl.signed_lt(read_data1, read_data2)
 
 # === Write Back ===
-rf[rd] <<= result_temp
-result <<= result_temp
+rf[rd] <<= result_temp  # Store the result in the register file
 
